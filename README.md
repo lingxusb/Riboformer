@@ -43,4 +43,7 @@ We provide 4 pretrained models that could be used to reproduce results in our wo
 | yeast_aging.h5 | Stein et al., Nature 2022 | predict ribosome profile in aged yeast (day 4) |
 | worm_aging.h5 | Stein et al., Nature 2022 | predict ribosome profile in aged worm (day 12) |
 
+### Contact
+Please contact shaobin@broadinstitute.org or raise an issue in the github repo with any questions about installation or usage.
+
  
