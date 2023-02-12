@@ -17,7 +17,30 @@ An anaconda environment can be set up with the following command:
 conda env create -f env.yml
 ```
 
-### Example
+### A quick example
+The following codes could be used to prepare training dataset and train the RiboSTD model to predict the ribosome profiles in E. coli with the high Mg/flash frozen protocol (Mohammad et al., 2019). The source data is retrieved from [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE119104). The genome sequence and gene positions are retrieved from genome build NC_000913.2.
+```
+python3 data_processing.py
+python3 training.py -e=15 -l=0.0005 -save
+```
 
-### Cite
+We provide an example for the following analysis in this link.
+
+### Running RiboSTD for new dataset
+The following files are required for generating training dataset for RiboSTD:
+- ```ribosome_density_f(r).wig```,  which store ribosome coverage data. Each line specifies a position in the genome and a signal value, usually representing the number of ribosome footprints (or reads) at that position. Two files should be provided, representing the forward (f) and reverse (r) direction.
+- ```genome_sequence.fasta```, which stores the genomic sequence for the organism.
+- ```gene_positions.csv```, which stores positions of all the genes. Each line specifies the starting position, ending position, and the direction for one gene (1 for forward and 2 for reverse).
+
+The training dataset could be prepared using ```data_processing.py``` and the output files will be used to train the RiboSTD model.
+
+### Pretrained models
+We provide 4 pretrained models that could be used to reproduce results in our work. The list of avaiable pretrained models:
+| Model name | Training dataset | Description |
+|----------|----------|----------|
+| bacteria_cm_mg.h5 |  Mohammad et al., eLife 2019 | predict ribosome profile with high Mg/flash frozen protocol in E. coli |
+| yeast_disome.h5 | Meydan & Guydosh, Mol Cell 2020 | predict disome profile in yeast |
+| yeast_aging.h5 | Stein et al., Nature 2022 | predict ribosome profile in aged yeast (day 4) |
+| worm_aging.h5 | Stein et al., Nature 2022 | predict ribosome profile in aged worm (day 12) |
+
  
