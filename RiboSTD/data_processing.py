@@ -4,10 +4,9 @@ this script converts the wig file (ribosome profiling) into training datasets
 """
 import numpy as np
 import os
-from itertools import groupby
 import json
 import argparse
-
+from itertools import groupby
 
 # load fasta files
 def fasta_iter(fasta_name):
@@ -154,11 +153,12 @@ def main():
     )
     parser.add_argument('-w', '--wsize', default = 40, type = int, 
                         help = 'window size for model training')
+    parser.add_argument('-d', '--data_dir', default = '/datasets/GSE119104 Mg buffer/', type = str,
+                        help = 'data folder name')
+                
     args = parser.parse_args()
-    
-    para = ' '
-    filepath = {'data_folder': '/datasets/GSE119104 Mg buffer/',
-                'exp1': 'GSM3358138_filter_Cm_ctrl',
+
+    filepath = {'exp1': 'GSM3358138_filter_Cm_ctrl',
                 'exp2': 'GSM3358140_freeze_Mg_ctrl',
                 'gff_name': 'NC000913.2.csv',
                 'seq_name': 'NC000913.2.fasta',
@@ -167,30 +167,31 @@ def main():
                 'z_index': 'cm_mg_zc_test.txt',
                 'y_pred': 'cm_mg_y_pred.txt',
                 }
+    parpath = os.path.dirname(os.getcwd())
+    for key in filepath.keys():
+        filepath[key] = parpath + args.data_dir + filepath[key]
 
     # load codon table
     with open('codon_table.json') as f:
         Ctable = json.load(f)
         
     complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
-    path = os.getcwd()
-    parpath = os.path.dirname(path)
     
     # load gene positions
     print("---------------------------------------------")
-    gene_position = np.genfromtxt(parpath + filepath['data_folder'] + filepath['gff_name'], delimiter=",")
+    gene_position = np.genfromtxt(filepath['gff_name'], delimiter=",")
     print(f"Gene position loaded. Number of ORF is {len(gene_position)}")
 
     # load genome sequences
     print("---------------------------------------------")
-    fiter = fasta_iter(parpath + filepath['data_folder'] + filepath['seq_name'])
+    fiter = fasta_iter(filepath['seq_name'])
     for _, seq in fiter:
         print(f"Sequence length: {len(seq)}")
 
     # load ribosome footprints
     print("---------------------------------------------")
-    Dwig1 = read_wig(parpath + filepath['data_folder'] + filepath['exp1'])
-    Dwig2 = read_wig(parpath + filepath['data_folder'] + filepath['exp2'])
+    Dwig1 = read_wig(pfilepath['exp1'])
+    Dwig2 = read_wig(filepath['exp2'])
     print("Finish reading the ribosome footprints.")
 
     # generate training datasets
@@ -198,9 +199,9 @@ def main():
     x_c, y_c, z_c = generate_training(gene_position, seq, Dwig1, Dwig2, args.wsize, Ctable, 15)
     print("Finish generating the training datasets.")
 
-    np.savetxt(parpath + filepath['data_folder'] + filepath['x_input'], x_c, delimiter="\t")
-    np.savetxt(parpath + filepath['data_folder'] + filepath['y_output'], y_c, delimiter="\t")
-    np.savetxt(parpath + filepath['data_folder'] + filepath['z_index'], z_c, delimiter="\t")
+    np.savetxt(filepath['x_input'], x_c, delimiter="\t")
+    np.savetxt(filepath['y_output'], y_c, delimiter="\t")
+    np.savetxt(filepath['z_index'], z_c, delimiter="\t")
     
     print(f"Datasets saved. size: {len(x_c)}.")
 
