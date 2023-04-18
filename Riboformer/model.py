@@ -6,7 +6,7 @@ from keras import layers
 
 from modules import ConvTower, TransformerBlock, TokenAndPositionEmbedding
 
-class RiboSTD(keras.Model):
+class Riboformer(keras.Model):
 
     def __init__(self, configs):
         super().__init__()

@@ -5,7 +5,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 from config import Config
-from model import RiboSTD
+from model import Riboformer
 
 def main():
     
@@ -38,7 +38,7 @@ def main():
     # initiate the model & the model configs
     model_config = Config()
     
-    model = RiboSTD(model_config)
+    model = Riboformer(model_config)
     
     wsize = model_config.wsize
 
