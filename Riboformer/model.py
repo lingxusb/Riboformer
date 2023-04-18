@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow import keras
 from keras import layers
 
-from modules import ConvTower, TransformerBlock, TokenAndPositionEmbedding, OnePotEncoding
+from modules import ConvTower, TransformerBlock, TokenAndPositionEmbedding
 
 class RiboSTD(keras.Model):
 

@@ -153,19 +153,23 @@ def main():
     )
     parser.add_argument('-w', '--wsize', default = 40, type = int, 
                         help = 'window size for model training')
-    parser.add_argument('-d', '--data_dir', default = '/datasets/GSE119104 Mg buffer/', type = str,
+    parser.add_argument('-d', '--data_dir', default = '/datasets/GSE119104_Mg_buffer/', type = str,
                         help = 'data folder name')
+    parser.add_argument('-r', '--reference', default = 'GSM3358138_filter_Cm_ctrl', type = str,
+                        help = 'reference dataset name')
+    parser.add_argument('-t', '--target', default = 'GSM3358140_freeze_Mg_ctrl', type = str,
+                        help = 'target dataset name')
                 
     args = parser.parse_args()
 
-    filepath = {'exp1': 'GSM3358138_filter_Cm_ctrl',
-                'exp2': 'GSM3358140_freeze_Mg_ctrl',
-                'gff_name': 'NC000913.2.csv',
-                'seq_name': 'NC000913.2.fasta',
-                'x_input': 'cm_mg_xc.txt',
-                'y_output': 'cm_mg_yc.txt',
-                'z_index': 'cm_mg_zc_test.txt',
-                'y_pred': 'cm_mg_y_pred.txt',
+    filepath = {'exp1': args.reference,
+                'exp2': args.target,
+                'gff_name': 'gene_positions.csv',
+                'seq_name': 'genome_sequence.fasta',
+                'x_input': 'xc.txt',
+                'y_output': 'yc.txt',
+                'z_index': 'zc.txt',
+                'y_pred': 'ypred.txt',
                 }
     parpath = os.path.dirname(os.getcwd())
     for key in filepath.keys():
@@ -190,7 +194,7 @@ def main():
 
     # load ribosome footprints
     print("---------------------------------------------")
-    Dwig1 = read_wig(pfilepath['exp1'])
+    Dwig1 = read_wig(filepath['exp1'])
     Dwig2 = read_wig(filepath['exp2'])
     print("Finish reading the ribosome footprints.")
 

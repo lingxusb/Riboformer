@@ -1,12 +1,24 @@
 # for the calculation of impact scores
 import os
 import numpy as np
+import argparse
 from keras.models import load_model
 
 from modules import TransformerBlock, TokenAndPositionEmbedding
 from config import Config
 
 def main():
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+
+    run = parser.add_argument_group(title='Prediction parameters',
+                                    description='Parameters for Prediction '
+                                                'using model')
+    run.add_argument('-i', '--input_folder', help='Input data folder')
+    run.add_argument('-m', '--model_folder', help='Model folder')
+    args = parser.parse_args()
         
     # model parameters
     model_config = Config()
@@ -26,21 +38,28 @@ def main():
     parpath = os.path.dirname(os.getcwd())
     inputpath = parpath + '/datasets/GSE139036 disome/'
 
-    model = load_model(parpath + '/models/yeast_disome.h5', 
-                       custom_objects={'TransformerBlock': transformer_block1,
-                                       'TransformerBlock': transformer_block2,
-                                       'TokenAndPositionEmbedding': embedding_layer,
-                                       },
-                       )
+    if args.model_folder.endswith('.h5'):
+        model = load_model(parpath + '/models/' + args.model_folder,
+                           custom_objects={'TransformerBlock': transformer_block1,
+                                           'TransformerBlock': transformer_block2,
+                                           'TokenAndPositionEmbedding': embedding_layer,
+                                           },
+                           )
+    else:
+        model = load_model(parpath + '/models/' + args.model_folder)
 
-    x_c = np.loadtxt(inputpath + 'disome_xc.txt', delimiter="\t")
+    inputpath = parpath + '/datasets/' + args.input_folder + '/'
+    all_files = os.listdir(inputpath)
+    xc_files = [f for f in all_files if f.endswith('xc.txt')]
+    x_c = np.loadtxt(inputpath + xc_files[0], delimiter="\t")
 
     x_c[:, :40] = x_c[:,0:40]/100 - 5
     x_c[:, 40] = x_c[:,40]/100
 
 
     # load ribosome pausing sites
-    indices = np.loadtxt(inputpath + 'disome_pause_indices.txt', delimiter='\t').astype('int')[:, 0]
+    indices = np.loadtxt(parpath + '/datasets/' + args.input_folder + '/' +
+                         'pause_indices.txt', delimiter="\t").astype('int')[:, 0]
     print(len(indices), "ribosome pausing sites.")
 
     y_pred = model.predict([x_c[:, -40:], x_c[:, :40]])
@@ -96,8 +115,9 @@ def main():
     
     print("--------------------------------------------------")
     print("Finishing calculation and saving results.")
-    np.savetxt(inputpath + 'disome_SIS.txt', y_rand_mean, delimiter='\t')
-    
+    np.savetxt(parpath + '/datasets/' + args.input_folder + '/'
+               + 'SIS.txt', \
+               y_rand_mean, delimiter="\t")
 
 if __name__ == "__main__":
     main()

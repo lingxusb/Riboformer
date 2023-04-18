@@ -74,7 +74,7 @@ class TransformerBlock(layers.Layer):
         config.update({
             "embed_dim": self.embed_dim,
             "num_heads": self.num_heads,
-            "mlp_dim": self.mlp_dim,
+            "mlp_dim": self.ff_dim,
         })
         return config
 
@@ -106,15 +106,7 @@ class TokenAndPositionEmbedding(layers.Layer):
         config = super().get_config()
         config.update({
             "vocab_size": self.vocab_size,
-            "max_len": self.max_len,
+            "max_len": self.maxlen,
             "embed_dim": self.embed_dim,
         })
         return config
-
-# one hot encoding of the codon sequences
-# def OnePotEncoding(x):
-#     x_encode = np.zeros([len(x), 40, 64, 1])
-#     for i in range(len(x)):
-#         for j in range(40):
-#             x_encode[i,j, int(x[i,j]), 0] = 1
-#     return x_encode

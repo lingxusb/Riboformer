@@ -29,7 +29,8 @@ def main():
 
     run = parser.add_argument_group(title = 'Prediction parameters',
                                     description = 'Parameters for Prediction using model')
-    run.add_argument('-o', '--output_h5', help = 'Output keras model')
+    run.add_argument('-o', '--output_h5', default = 'cm_mg_model2', help = 'Output keras model')
+    run.add_argument('-i', '--input_folder', default = 'GSE119104_Mg_buffer', help='Input data folder')
 
     args = parser.parse_args()
     
@@ -42,13 +43,17 @@ def main():
     wsize = model_config.wsize
 
     print("--------------------------------------------------\nData loading")
-    
-    parpath = os.path.dirname(os.getcwd())
-    datapath = parpath + '/datasets/GSE119104 Mg buffer/'
+
+    path = os.getcwd()
+    parpath = os.path.dirname(path)
+    datapath = parpath + '/datasets/' + args.input_folder + '/'
     print(f"Current dictionary: {datapath}")
-    
-    x_c = np.loadtxt(datapath + 'cm_mg_xc.txt', delimiter = '\t')
-    y_c = np.loadtxt(datapath + 'cm_mg_yc.txt', delimiter = '\t')
+
+    all_files = os.listdir(datapath)
+    xc_files = [f for f in all_files if f.endswith('xc.txt')]
+    yc_files = [f for f in all_files if f.endswith('yc.txt')]
+    x_c = np.loadtxt(datapath + xc_files[0], delimiter="\t")
+    y_c = np.loadtxt(datapath + yc_files[0], delimiter="\t")
 
     x_c[:,:wsize] = x_c[:,:wsize]/100 - 5
     y_c = y_c/100 - 5
@@ -124,7 +129,7 @@ def main():
 
     # save the model
     if args.save:
-        model.save(parpath + "/models/cm_mg_model", save_format = 'tf')
+        model.save(parpath + "/models/" + args.output_h5, save_format = 'tf')
 
     print("--------------------------------------------------\nfinished!")       
 
