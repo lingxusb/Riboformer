@@ -103,76 +103,7 @@ def sum_adjac(RD):
         res.append(np.sum(RD[i*3:i*3+3]))
     return np.array(res)
 
-
-# # get slow codons in a specific dataset and the pause scores
-# def GetPauseScore(A_site, read_A_site, Dwig, my_data2, seq, y_pred, z_c, gene_index,
-#                   thres = 0.003, normal_factor = 10000, pred=0):
-#     # A_site = 11, 14, 17 for A, P, E site in elife datasets， -3， 0, and 3 for A, P, E site in other datasets
-#     # read_A_site = 14 for elife datasets, = 0 for Circuit dataset (center mapping)
-#     # pred = 1: use the prediction values of ribosome reads
-#     # gene_index: default is np.arange(len(my_data2)), otherwise could range a subset of genes
-#     # thres: 0.003 for E coli data, 3 for yeast data
-#     # normal_factor: 10000 for E coli cells, 10 for yeast cells.
-#
-#     Pause_score = {
-#         'ATA': [], 'ATC': [], 'ATT': [], 'ATG': [],
-#         'ACA': [], 'ACC': [], 'ACG': [], 'ACT': [],
-#         'AAC': [], 'AAT': [], 'AAA': [], 'AAG': [],
-#         'AGC': [], 'AGT': [], 'AGA': [], 'AGG': [],
-#         'CTA': [], 'CTC': [], 'CTG': [], 'CTT': [],
-#         'CCA': [], 'CCC': [], 'CCG': [], 'CCT': [],
-#         'CAC': [], 'CAT': [], 'CAA': [], 'CAG': [],
-#         'CGA': [], 'CGC': [], 'CGG': [], 'CGT': [],
-#         'GTA': [], 'GTC': [], 'GTG': [], 'GTT': [],
-#         'GCA': [], 'GCC': [], 'GCG': [], 'GCT': [],
-#         'GAC': [], 'GAT': [], 'GAA': [], 'GAG': [],
-#         'GGA': [], 'GGC': [], 'GGG': [], 'GGT': [],
-#         'TCA': [], 'TCC': [], 'TCG': [], 'TCT': [],
-#         'TTC': [], 'TTT': [], 'TTA': [], 'TTG': [],
-#         'TAC': [], 'TAT': [], 'TAA': [], 'TAG': [],
-#         'TGC': [], 'TGT': [], 'TGA': [], 'TGG': [],
-#     }
-#
-#     for i in gene_index:
-#         update = 0
-#         if my_data2[i][2] == 1:
-#             # positive strand
-#             if my_data2[i][1] - my_data2[i][0] > 200:
-#                 update = 1
-#                 RD1 = Dwig[(int(my_data2[i][0]) - 1) + A_site:(int(my_data2[i][1])) + A_site, 1]
-#                 seq_t = seq[int(my_data2[i][0]) - 1:int(my_data2[i][1])]
-#         else:
-#             # negtive strand
-#             if my_data2[i][1] - my_data2[i][0] > 200:
-#                 update = 1
-#                 RD1 = Dwig[(int(my_data2[i][0]) - 1) - A_site:(int(my_data2[i][1])) - A_site, 2]
-#                 RD1 = RD1[::-1]
-#                 seq_t = seq[int(my_data2[i][0]) - 1:int(my_data2[i][1])]
-#                 seq_t = "".join(complement.get(base, base) for base in reversed(seq_t))
-#
-#         if update == 1 and np.mean(RD1) > thres:
-#             codons = list(seq_t[n:n + 3] for n in range(0, len(seq_t), 3))
-#             Rpro2 = np.copy(RD1)
-#             Rpro2[0:15] = np.mean(RD1)
-#             Rpro2[-15:] = np.mean(RD1)
-#
-#             # use the prediction values in the calculation
-#             if pred == 1:
-#                 cindex = np.where(z_c[:, 0] == i)[0]
-#                 for p in range(len(cindex)):
-#                     Rpro2[int(z_c[cindex[p], 1]) * 3 - 30 + (read_A_site - A_site):int(z_c[cindex[p], 1]) * 3 + 3 - 30 + (
-#                                 read_A_site - A_site)] = 0
-#                     Rpro2[int(z_c[cindex[p], 1]) * 3 + 1 - 30 + (read_A_site - A_site)] = (np.power(2, (
-#                     y_pred[cindex[p]]) + 5) - 32) / normal_factor
-#
-#             RDc2 = sum_adjac(Rpro2)
-#
-#             for j in range(5, len(RDc2) - 5):
-#                 if codons[j] in Pause_score.keys():
-#                     Pause_score[codons[j]].append(RDc2[j] / np.mean(RDc2))
-#
-#     return Pause_score
-
+# get pause scores
 def get_pause_score(a_site, read_a_site, dwig, gene_data, sequence, y_pred, z_c, gene_index,
                     thres=0.003, normal_factor=10000, pred=0):
     codon_pause_scores = {
