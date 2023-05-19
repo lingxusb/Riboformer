@@ -23,13 +23,14 @@ The following codes could be used to prepare training dataset and train the Ribo
 python3 data_processing.py
 python3 training.py -e=15 -l=0.0005 --save
 ```
+The running time is ~15 min on a V100 GPU (16GB). Results will be saved in the ```/models``` folder.
 
 
 ### Running Riboformer for new dataset
 The following files are required for generating training dataset for Riboformer:
-- ```ribosome_density_f(r).wig```,  which store ribosome coverage data. Each line specifies a position in the genome and a signal value, usually representing the number of ribosome footprints (or reads) at that position. Two files representing the forward (f) and reverse (r) direction should be provided for the reference dataset and the target dataset.
+- ```ribosome_density_f(r).wig```,  which store ribosome coverage data. Each line specifies a position in the genome and a signal value, usually representing the number of ribosome footprints (or reads) at that position. Two files representing the forward (f) and reverse (r) direction should be provided for the reference dataset and the target dataset. Values are tab-separated.
 - ```genome_sequence.fasta```, which stores the genomic sequence for the organism.
-- ```gene_positions.csv```, which stores positions of all the genes. Each line specifies the starting position, ending position, and the direction for one gene (1 for forward and 2 for reverse).
+- ```gene_positions.csv```, which stores positions of all the genes. Each line specifies the starting position, ending position, and the direction for one gene (1 for forward and 2 for reverse). Values are tab-separated.
 
 All the files should be placed in one folder. The training dataset could be prepared using ```data_processing.py``` and the output files will be used to train the Riboformer model.
 
