@@ -26,16 +26,43 @@ python3 training.py -e=15 -l=0.0005 --save
 The running time is ~15 min on a V100 GPU (16GB). Results will be saved in the ```/models``` folder.
 
 
-### Running Riboformer for new dataset
+### Training Riboformer on new dataset
 The following files are required for generating training dataset for Riboformer:
 - ```ribosome_density_f(r).wig```,  which store ribosome coverage data. Each line specifies a position in the genome and a signal value, usually representing the number of ribosome footprints (or reads) at that position. Two files representing the forward (f) and reverse (r) direction should be provided for the reference dataset and the target dataset. Values are tab-separated.
 - ```genome_sequence.fasta```, which stores the genomic sequence for the organism.
 - ```gene_positions.csv```, which stores positions of all the genes. Each line specifies the starting position, ending position, and the direction for one gene (1 for forward and 2 for reverse). Values are tab-separated.
 
-All the files should be placed in one folder. The training dataset could be prepared using ```data_processing.py``` and the output files will be used to train the Riboformer model.
+All the files should be placed in one data folder. The training dataset could be prepared using ```data_processing.py``` and the output files will be used to train the Riboformer model.
+
+To run the function, execute the following command:
+```
+python3 data_processing.py [-h] [-w WSIZE] [-d DATA_DIR] [-r REFERENCE] [-t TARGET]
+```
+The function accepts the following optional arguments:
+
+- `-h, --help`: Show the help message and exit.
+- `-w WSIZE, --wsize WSIZE`: Set the window size for model training (default: 40).
+- `-d DATA_DIR, --data_dir DATA_DIR`: Set the data folder name (default: '/datasets/GSE119104_Mg_buffer/').
+- `-r REFERENCE, --reference REFERENCE`: Set the reference dataset name (default: 'GSM3358138_filter_Cm_ctrl').
+- `-t TARGET, --target TARGET`: Set the target dataset name (default: 'GSM3358140_freeze_Mg_ctrl').
+
+The function automatically loads gene positions and genome sequences from the data folder.
+
+
+### Applying trained Riboformer model on new dataset
+Process the new dataset using ```data_processing.py``` and put it in the data folder. To apply a trained Riboformer model, execute the following command:
+```
+python3 transfer.py [-h] [-i INPUT_FOLDER] [-m MODEL_FOLDER]
+```
+The script accepts the following optional arguments:
+
+- `-h, --help`: Show the help message and exit.
+- `-i INPUT_FOLDER, --input_folder INPUT_FOLDER`: Set the input data folder.
+- `-m MODEL_FOLDER, --model_folder MODEL_FOLDER`: Set the model folder.
+
 
 ### Pretrained models
-We provide 5 pretrained models that could be used to reproduce results in our work. The list of avaiable pretrained models:
+We provide 5 pretrained models that could be used to reproduce results in our work. The list of available pretrained models:
 | Model name | Training dataset | Description |
 |----------|----------|----------|
 | bacteria_cm_mg |  Mohammad et al., eLife 2019 | predict ribosome profile with high Mg/flash frozen protocol in E. coli |
