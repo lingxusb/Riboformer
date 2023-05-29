@@ -71,5 +71,6 @@ We provide 5 pretrained models that could be used to reproduce results in our wo
 | worm_aging | Stein et al., Nature 2022 | predict ribosome profile in aged worm (day 12) |
 | covid_model | Finkel et al., Nature 2021 | predict ribosome profile for SARS-CoV-2 (24 hpi) |
 
-### Contact
-Please contact shaobin@broadinstitute.org or raise an issue in the github repo with any questions about installation or usage.
+### Reference
+- [Riboformer: A Deep Learning Framework for Predicting Context-Dependent Translation Dynamics](https://www.biorxiv.org/content/10.1101/2023.04.24.538053v1)
+- Please contact shaobin@broadinstitute.org or raise an issue in the github repo with any questions about installation or usage.
