@@ -13,4 +13,4 @@ This repository contains supplementary code to reproduce parts of the analyses p
 > Related dataset can be downloaded at [Google drive](https://drive.google.com/file/d/1F8mwXFDC9ufXTsuWQEP6g_PGHD23cGjV/view?usp=sharing).
 
 
-Model prediction and source data for GSE77617, GSE152664, GSE152850 and GSE165592 can be assessed at [Google drive] (https://drive.google.com/file/d/1XXmyePpJDK5RkbrF1tRkVu8EFFiy-rOd/view?usp=sharing)
+Model prediction and source data for GSE77617, GSE152664, GSE152850 and GSE165592 can be assessed at [Google drive](https://drive.google.com/file/d/1XXmyePpJDK5RkbrF1tRkVu8EFFiy-rOd/view?usp=sharing)
