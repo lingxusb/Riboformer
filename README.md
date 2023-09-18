@@ -20,8 +20,8 @@ conda env create -f env.yml
 ### A quick example
 The following codes could be used to prepare training dataset and train the Riboformer model to predict the ribosome profiles in E. coli with the high Mg/flash frozen protocol (Mohammad et al., 2019). The source data is retrieved from [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE119104). The genome sequence and gene positions are retrieved from genome build NC_000913.2.
 ```
-python3 data_processing.py
-python3 training.py -e=15 -l=0.0005 --save
+python data_processing.py
+python training.py -e=15 -l=0.0005 --save
 ```
 The running time is ~15 min on a V100 GPU (16GB). Results will be saved in the ```/models``` folder.
 
@@ -36,7 +36,7 @@ All the files should be placed in one data folder. The training dataset could be
 
 To run the function, execute the following command:
 ```
-python3 data_processing.py [-h] [-w WSIZE] [-d DATA_DIR] [-r REFERENCE] [-t TARGET]
+python data_processing.py [-h] [-w WSIZE] [-d DATA_DIR] [-r REFERENCE] [-t TARGET]
 ```
 The function accepts the following optional arguments:
 
@@ -52,7 +52,7 @@ The function automatically loads gene positions and genome sequences from the da
 ### Applying trained Riboformer model on new dataset
 Process the new dataset using ```data_processing.py``` and put it in the data folder. To apply a trained Riboformer model, execute the following command:
 ```
-python3 transfer.py [-h] [-i INPUT_FOLDER] [-m MODEL_FOLDER]
+python transfer.py [-h] [-i INPUT_FOLDER] [-m MODEL_FOLDER]
 ```
 The script accepts the following optional arguments:
 
