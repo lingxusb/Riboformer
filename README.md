@@ -12,41 +12,52 @@ Python package dependencies:
 - pandas
 - juypterlab
 
-An anaconda environment can be set up with the following command:
+We recommend using [Conda](https://conda.io/en/latest/index.html) to install our package. An anaconda environment can be set up with the following command:
 ```
 conda env create -f env.yml
 ```
-
+Systems requirements: Linux / Windows (64 bit)
 ### A quick example
 The following codes could be used to prepare training dataset and train the Riboformer model to predict the ribosome profiles in E. coli with the high Mg/flash frozen protocol (Mohammad et al., 2019). The source data is retrieved from [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE119104). The genome sequence and gene positions are retrieved from genome build NC_000913.2.
 ```
 python data_processing.py
 python training.py -e=15 -l=0.0005 --save
 ```
-The running time is ~15 min on a V100 GPU (16GB). Results will be saved in the ```/models``` folder.
+Our algorithm can be run on either CPU or GPU (requires cuda). The running time is ~15 min on a V100 GPU (16GB). Results will be saved in the ```/models``` folder.
 
 
 ### Training Riboformer on new dataset
 The following files are required for generating training dataset for Riboformer:
-- ```ribosome_density_f(r).wig```,  which store ribosome coverage data. Each line specifies a position in the genome and a signal value, usually representing the number of ribosome footprints (or reads) at that position. Two files representing the forward (f) and reverse (r) direction should be provided for the reference dataset and the target dataset. Values are tab-separated.
+- ```inputdata_f(r).wig```,  which store ribosome coverage data for the reference ribosome profiling dataset. Each line specifies a position in the genome and the number of ribosome footprints (or reads) at that position. Two files representing the forward (f) and reverse (r) direction should be provided.
+	*Sample data*:
+	```
+    track type=wiggle_0 name=tracklabel viewLimits=-5:5 color=83,8,86
+    fixedStep  chrom=NC_000913.2  start=1  step=1
+   0.0
+   0.0
+   0.0
+	```
+	Please note that the ```chrom``` name should match the chromosome names in the genome sequence and genome annotations. For example, the wig file shown here is using the reference genome of *E. coli* MG1655 ([NC_000913.2](https://www.ncbi.nlm.nih.gov/nuccore/49175990)).
+-  ```outputdata_f(r).wig```,  which store ribosome coverage data for the target ribosome profiling dataset. Each line specifies a position in the genome and the number of ribosome footprints (or reads) at that position. Two files representing the forward (f) and reverse (r) direction should be provided.
 - ```genome_sequence.fasta```, which stores the genomic sequence for the organism.
-- ```gene_positions.csv```, which stores positions of all the genes. Each line specifies the starting position, ending position, and the direction for one gene (1 for forward and 2 for reverse). Values are tab-separated.
+- ```gene_annotation.gff3```, which stores gene annotations for the organism.
 
-All the files should be placed in one data folder. The training dataset could be prepared using ```data_processing.py``` and the output files will be used to train the Riboformer model.
+The genome sequences and gene annotation files could be directly downloaded from NCBI. Sample data for prokaryotic cells are included in ```/datasets/GSE119104_Mg_buffer/``` . Sample data for eukaryotic cells are included in ```/datasets/GSE139036_disome/``` . All the files should be placed in one data folder. The training dataset could be prepared using ```data_processing.py``` and the output files will be used to train the Riboformer model.
 
 To run the function, execute the following command:
 ```
-python data_processing.py [-h] [-w WSIZE] [-d DATA_DIR] [-r REFERENCE] [-t TARGET]
+python data_processing.py [-h] [-w WSIZE] [-d DATA_DIR] [-r REFERENCE] [-t TARGET] [-th THRESHOLD]
 ```
 The function accepts the following optional arguments:
 
 - `-h, --help`: Show the help message and exit.
 - `-w WSIZE, --wsize WSIZE`: Set the window size for model training (default: 40).
-- `-d DATA_DIR, --data_dir DATA_DIR`: Set the data folder name (default: '/datasets/GSE119104_Mg_buffer/').
-- `-r REFERENCE, --reference REFERENCE`: Set the reference dataset name (default: 'GSM3358138_filter_Cm_ctrl').
-- `-t TARGET, --target TARGET`: Set the target dataset name (default: 'GSM3358140_freeze_Mg_ctrl').
+- `-d DATA_DIR, --data_dir DATA_DIR`: Set the data folder name in `/datasets/`. (default: 'GSE119104_Mg_buffer').
+- `-r REFERENCE, --reference REFERENCE`: Set the name of reference dataset. (default: 'GSM3358138_filter_Cm_ctrl', the corresponding file names are 'GSM3358138_filter_Cm_ctrl_f.wig' and 'GSM3358138_filter_Cm_ctrl_r.wig' ).
+- `-t TARGET, --target TARGET`: Set the name of target dataset. (default: 'GSM3358140_freeze_Mg_ctrl', the corresponding file names are 'GSM3358140_freeze_Mg_ctrl_f.wig' and 'GSM3358140_freeze_Mg_ctrl_r.wig').
+- `-th THRESHOLD, --threshold THRESHOLD`: For the efficient analysis of Ribosome profiling data, our algorithm includes the top quartile of genes based on Ribosome Density (RD). (default: 25, include the top 25% genes).
 
-The function automatically loads gene positions and genome sequences from the data folder.
+The function automatically loads gene annotations (ending in `.gff3`) and genome sequences (ending in `.fasta`) from the data folder. The output will be three files in the same data folder, storing the input and output data for all codons of interests and the genome positions for each codon.
 
 
 ### Applying trained Riboformer model on new dataset
