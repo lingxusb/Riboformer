@@ -16,8 +16,8 @@ def main():
     run = parser.add_argument_group(title='Prediction parameters',
                                     description='Parameters for Prediction '
                                                 'using model')
-    run.add_argument('-i', '--input_folder', help='Input data folder')
-    run.add_argument('-m', '--model_folder', help='Model folder')
+    run.add_argument('-i', '--input_folder', default = 'GSE139036_disome', help='Input data folder')
+    run.add_argument('-m', '--model_folder', default = 'yeast_disome', help='Model folder')
     args = parser.parse_args()
         
     # model parameters
@@ -51,7 +51,12 @@ def main():
     inputpath = parpath + '/datasets/' + args.input_folder + '/'
     all_files = os.listdir(inputpath)
     xc_files = [f for f in all_files if f.endswith('xc.txt')]
+    
+    if len(xc_files) < 1:
+        print("Input data not found. Please use the data_processing.py to generate the input dataset.")
+
     x_c = np.loadtxt(inputpath + xc_files[0], delimiter="\t")
+    print(f"Input data size is {len(x_c)}")
 
     x_c[:, :40] = x_c[:,0:40]/100 - 5
     x_c[:, 40] = x_c[:,40]/100
@@ -104,6 +109,7 @@ def main():
 
         if i % 1000 == 0:
             print(f"Finished {i} pause sites.")
+    print(f"Finished {len(indices)} pause sites.")
     
     print("--------------------------------------------------")
     print("Model prediction.")

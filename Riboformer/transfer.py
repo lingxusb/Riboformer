@@ -49,6 +49,12 @@ def main():
     inputpath = os.path.join(parpath, 'datasets', args.input_folder)
     all_files = os.listdir(inputpath)
     xc_files = [f for f in all_files if f.endswith('xc.txt')]
+
+    if len(xc_files) < 1:
+        print("Input data not found. Please use the data_processing.py to generate the input dataset.")
+
+    if len(xc_files) > 1:
+        print("Multiple input datasets exist.")
     
     # Data loading progress bar
     with tqdm(total=len(xc_files), desc="Data Loading", unit="file") as pbar:

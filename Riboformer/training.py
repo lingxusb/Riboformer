@@ -52,6 +52,13 @@ def main():
     all_files = os.listdir(datapath)
     xc_files = [f for f in all_files if f.endswith('xc.txt')]
     yc_files = [f for f in all_files if f.endswith('yc.txt')]
+
+    if len(xc_files) < 1 or len(yc_files) < 1:
+        print("Training data not found. Please use the data_processing.py to generate the input dataset.")
+
+    if len(xc_files) > 1 or len(yc_files) > 1:
+        print("Multiple training datasets exist.")
+
     x_c = np.loadtxt(datapath + xc_files[0], delimiter="\t")
     y_c = np.loadtxt(datapath + yc_files[0], delimiter="\t")
 

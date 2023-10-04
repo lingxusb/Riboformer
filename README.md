@@ -1,3 +1,5 @@
+
+
 # Riboformer: a Deep Learning Framework for Predicting Context-Dependent Translation Dynamics
 
 ![title](https://user-images.githubusercontent.com/12596418/232886009-400f779b-b23d-489c-b52f-194da79a4e5c.png)
@@ -46,7 +48,7 @@ The genome sequences and gene annotation files could be directly downloaded from
 
 To run the function, execute the following command:
 ```
-python data_processing.py [-h] [-w WSIZE] [-d DATA_DIR] [-r REFERENCE] [-t TARGET] [-th THRESHOLD]
+python data_processing.py [-h] [-w WSIZE] [-d DATA_DIR] [-r REFERENCE] [-t TARGET] [-th THRESHOLD] [-p PSITE]
 ```
 The function accepts the following optional arguments:
 
@@ -56,8 +58,9 @@ The function accepts the following optional arguments:
 - `-r REFERENCE, --reference REFERENCE`: Set the name of reference dataset. (default: 'GSM3358138_filter_Cm_ctrl', the corresponding file names are 'GSM3358138_filter_Cm_ctrl_f.wig' and 'GSM3358138_filter_Cm_ctrl_r.wig' ).
 - `-t TARGET, --target TARGET`: Set the name of target dataset. (default: 'GSM3358140_freeze_Mg_ctrl', the corresponding file names are 'GSM3358140_freeze_Mg_ctrl_f.wig' and 'GSM3358140_freeze_Mg_ctrl_r.wig').
 - `-th THRESHOLD, --threshold THRESHOLD`: For the efficient analysis of Ribosome profiling data, our algorithm includes the top quartile of genes based on Ribosome Density (RD). (default: 25, include the top 25% genes).
+- `-p PSITE, --psite PSITE`: We applied uniform offsetting in data preprocessing and this parameter defines the offset from the ends of the aligned fragments (default: 14, Mohammad et al., eLife 2019).
 
-The function automatically loads gene annotations (ending in `.gff3`) and genome sequences (ending in `.fasta`) from the data folder. The output will be three files in the same data folder, storing the input and output data for all codons of interests and the genome positions for each codon.
+The function automatically loads gene annotations (ending in `.gff3`) and genome sequences (ending in `.fasta`) from the data folder. The output will be three files in the same data folder, storing the input and output data for all codons of interests and the genome positions for each codon. These datasets can then be used for model training.
 
 
 ### Applying trained Riboformer model on new dataset
@@ -68,9 +71,11 @@ python transfer.py [-h] [-i INPUT_FOLDER] [-m MODEL_FOLDER]
 The script accepts the following optional arguments:
 
 - `-h, --help`: Show the help message and exit.
-- `-i INPUT_FOLDER, --input_folder INPUT_FOLDER`: Set the input data folder.
-- `-m MODEL_FOLDER, --model_folder MODEL_FOLDER`: Set the model folder.
+- `-i INPUT_FOLDER, --input_folder INPUT_FOLDER`: Set the input data folder. This folder should contain the processed dataset.
+- `-m MODEL_FOLDER, --model_folder MODEL_FOLDER`: Set the model folder. This folder should contain a trained Riboformer model.
 
+We have provided sample data for this function: `python transfer.py -i=GSE152850_yeast -m=yeast_disome`. This will produce a file named `model_prediction.txt `storing the predicted ribosome densities in the input folder. The corresponding codon positions are stored in `zc.txt`
+ file in the input datasets.
 
 ### Pretrained models
 We provide 5 pretrained models that could be used to reproduce results in our work. The list of available pretrained models:
@@ -81,6 +86,21 @@ We provide 5 pretrained models that could be used to reproduce results in our wo
 | yeast_aging | Stein et al., Nature 2022 | predict ribosome profile in aged yeast (day 4) |
 | worm_aging | Stein et al., Nature 2022 | predict ribosome profile in aged worm (day 12) |
 | covid_model | Finkel et al., Nature 2021 | predict ribosome profile for SARS-CoV-2 (24 hpi) |
+
+### Comparison of Riboformer with baseline methods
+We implemented RiboMIMO and Riboexp based on the source code provided from the original research (https://github.com/tiantz17/RiboMIMO, and https://github.com/Liuxg16/Riboexp). To fairly compare Riboexp and RiboMIMO with our model, we truncated the reference input branch in Riboformer to make it a purely sequence-based model (seq-only mode). All models were trained on the same set of highly expressed genes using cross-validation tests. The training datasets for the two models are available in the `benchmarking` folder.
+
+### Reproducibility
+ `reproducibility/riboformer_artifact_correct.ipynb` :  reproduce Fig 1f, 1g, Supp fig 2, 3.
+
+> Related dataset can be downloaded at [Google drive](https://drive.google.com/file/d/1B5RV_74uPLYjpakOdUmH03_NMP0hQXrB/view?usp=sharing).
+
+`reproducibility/riboformer_yeast_SIS.ipynb` :  reproduce Fig 2b, 2c, 2e.
+
+> Related dataset can be downloaded at [Google drive](https://drive.google.com/file/d/1F8mwXFDC9ufXTsuWQEP6g_PGHD23cGjV/view?usp=sharing).
+
+
+Model prediction and source data for GSE77617, GSE152664, GSE152850 and GSE165592 can be assessed at [Google drive](https://drive.google.com/file/d/1XXmyePpJDK5RkbrF1tRkVu8EFFiy-rOd/view?usp=sharing)
 
 ### Reference
 - [Riboformer: A Deep Learning Framework for Predicting Context-Dependent Translation Dynamics](https://www.biorxiv.org/content/10.1101/2023.04.24.538053v1)

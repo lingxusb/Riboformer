@@ -194,8 +194,8 @@ def main():
                         help = 'data folder name')
     parser.add_argument('-r', '--reference', default = 'GSM3358138_filter_Cm_ctrl', type = str,
                         help = 'reference dataset name')
-    parser.add_argument('-a', '--asite', default = 14, type = int,
-                        help = 'a site position')
+    parser.add_argument('-p', '--psite', default = 14, type = int,
+                        help = 'offset for p site position')
     parser.add_argument('-t', '--target', default = 'GSM3358140_freeze_Mg_ctrl', type = str,
                         help = 'target dataset name')
                 
@@ -259,7 +259,7 @@ def main():
             in_handle.close()
             gff_data = np.array(gff_data)
 
-            x_c, y_c, z_c = generate_training(gff_data, seq_dict[key], Dwig1[key], Dwig2[key], args.wsize, Ctable, int(args.asite),
+            x_c, y_c, z_c = generate_training(gff_data, seq_dict[key], Dwig1[key], Dwig2[key], args.wsize, Ctable, int(args.psite),
                                               float(args.threshold))
             x_c_total = x_c_total + x_c
             y_c_total = y_c_total + y_c
