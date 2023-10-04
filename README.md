@@ -30,11 +30,10 @@ Our algorithm can be run on either CPU or GPU (requires cuda). The running time 
 
 ### Training Riboformer on new dataset
 The following files are required for generating training dataset for Riboformer:
-- ```inputdata_f(r).wig```,  which store ribosome coverage data for the reference ribosome profiling dataset. Each line specifies a position in the genome and the number of ribosome footprints (or reads) at that position. Two files representing the forward (f) and reverse (r) direction should be provided.
-	*Sample data*:
+- ```inputdata_f(r).wig```,  which store ribosome coverage data for the reference ribosome profiling dataset. Each line specifies a position in the genome and the number of ribosome footprints (or reads) at that position. Two files representing the forward (f) and reverse (r) direction should be provided:
 	```
-    track type=wiggle_0 name=tracklabel viewLimits=-5:5 color=83,8,86
-    fixedStep  chrom=NC_000913.2  start=1  step=1
+   track type=wiggle_0 name=tracklabel viewLimits=-5:5 color=83,8,86
+   fixedStep  chrom=NC_000913.2  start=1  step=1
    0.0
    0.0
    0.0
@@ -59,6 +58,7 @@ The function accepts the following optional arguments:
 - `-t TARGET, --target TARGET`: Set the name of target dataset. (default: 'GSM3358140_freeze_Mg_ctrl', the corresponding file names are 'GSM3358140_freeze_Mg_ctrl_f.wig' and 'GSM3358140_freeze_Mg_ctrl_r.wig').
 - `-th THRESHOLD, --threshold THRESHOLD`: For the efficient analysis of Ribosome profiling data, our algorithm includes the top quartile of genes based on Ribosome Density (RD). (default: 25, include the top 25% genes).
 - `-p PSITE, --psite PSITE`: We applied uniform offsetting in data preprocessing and this parameter defines the offset from the ends of the aligned fragments (default: 14, Mohammad et al., eLife 2019).
+- `-th THRESHOLD, --threshold THRESHOLD`: For the efficient analysis of data, our algorithm includes the top quartile of genes based on Ribosome Density (RD). (default: 25, include the top 25% genes).
 
 The function automatically loads gene annotations (ending in `.gff3`) and genome sequences (ending in `.fasta`) from the data folder. The output will be three files in the same data folder, storing the input and output data for all codons of interests and the genome positions for each codon. These datasets can then be used for model training.
 
