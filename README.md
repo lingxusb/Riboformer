@@ -23,7 +23,7 @@ Systems requirements: Linux / Windows (64 bit)
 The following codes could be used to prepare training dataset and train the Riboformer model to predict the ribosome profiles in E. coli with the high Mg/flash frozen protocol (Mohammad et al., 2019). The source data is retrieved from [here](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE119104). The genome sequence and gene positions are retrieved from genome build NC_000913.2.
 ```
 python data_processing.py
-python training.py -e=15 -l=0.0005 --save
+python training.py -e 15 -l 0.0005 --save
 ```
 Our algorithm can be run on either CPU or GPU (requires cuda). The running time is ~15 min on a V100 GPU (16GB). Results will be saved in the ```/models``` folder.
 
