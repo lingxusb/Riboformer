@@ -56,7 +56,6 @@ The function accepts the following optional arguments:
 - `-d DATA_DIR, --data_dir DATA_DIR`: Set the data folder name in `/datasets/`. (default: 'GSE119104_Mg_buffer').
 - `-r REFERENCE, --reference REFERENCE`: Set the name of reference dataset. (default: 'GSM3358138_filter_Cm_ctrl', the corresponding file names are 'GSM3358138_filter_Cm_ctrl_f.wig' and 'GSM3358138_filter_Cm_ctrl_r.wig' ).
 - `-t TARGET, --target TARGET`: Set the name of target dataset. (default: 'GSM3358140_freeze_Mg_ctrl', the corresponding file names are 'GSM3358140_freeze_Mg_ctrl_f.wig' and 'GSM3358140_freeze_Mg_ctrl_r.wig').
-- `-th THRESHOLD, --threshold THRESHOLD`: For the efficient analysis of Ribosome profiling data, our algorithm includes the top quartile of genes based on Ribosome Density (RD). (default: 25, include the top 25% genes).
 - `-p PSITE, --psite PSITE`: We applied uniform offsetting in data preprocessing and this parameter defines the offset from the ends of the aligned fragments (default: 14, Mohammad et al., eLife 2019).
 - `-th THRESHOLD, --threshold THRESHOLD`: For the efficient analysis of data, our algorithm includes the top quartile of genes based on Ribosome Density (RD). (default: 25, include the top 25% genes).
 
