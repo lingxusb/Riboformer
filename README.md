@@ -73,7 +73,12 @@ The script accepts the following optional arguments:
 - `-i INPUT_FOLDER, --input_folder INPUT_FOLDER`: Set the input data folder. This folder should contain the processed dataset.
 - `-m MODEL_FOLDER, --model_folder MODEL_FOLDER`: Set the model folder. This folder should contain a trained Riboformer model.
 
-We have provided sample data for this function: `python transfer.py -i=GSE152850_yeast -m=yeast_disome`. This will produce a file named `model_prediction.txt `storing the predicted ribosome densities in the input folder. The corresponding codon positions are stored in `zc.txt`
+We have provided sample data for this function: 
+```
+cd Riboformer/Riboformer
+python transfer.py -i ../datasets/GSE139036_disome -m ../models/yeast_disome
+```
+This will produce a file named `model_prediction.txt `storing the predicted ribosome densities in the input folder. The corresponding codon positions are stored in `zc.txt`
  file in the input datasets.
 
 ### Pretrained models
