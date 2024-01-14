@@ -108,4 +108,4 @@ Model prediction and source data for GSE77617, GSE152664, GSE152850 and GSE16559
 
 ### Reference
 - [Riboformer: A Deep Learning Framework for Predicting Context-Dependent Translation Dynamics](https://www.biorxiv.org/content/10.1101/2023.04.24.538053v1)
-- Please contact shaobin@broadinstitute.org or raise an issue in the github repo with any questions about installation or usage.
+- Please contact shaobinlx@gmail.com or raise an issue in the github repo with any questions about installation or usage.
