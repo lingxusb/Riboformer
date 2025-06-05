@@ -106,7 +106,7 @@ We implemented RiboMIMO and Riboexp based on the source code provided from the o
 
 Model prediction and source data for GSE77617, GSE152664, GSE152850 and GSE165592 can be assessed at [Google drive](https://drive.google.com/file/d/1XXmyePpJDK5RkbrF1tRkVu8EFFiy-rOd/view?usp=sharing)
 
-Please check `pause_sites.ipynb` for the generation of the 'pause_indices.txt' file.
+Please check `pause_sites.ipynb` for the generation of the `pause_indices.txt` file.
 
 ### Reference
 - [Preprint, Riboformer: a deep learning framework for predicting context-dependent translation dynamics](https://www.biorxiv.org/content/10.1101/2023.04.24.538053v1)
